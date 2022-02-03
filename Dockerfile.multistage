@@ -1,0 +1,40 @@
+# syntax=docker/dockerfile:1
+
+##
+## Build
+##
+FROM golang:1.18beta1-bullseye AS build
+
+WORKDIR /app
+
+COPY go.mod ./
+COPY go.sum ./
+COPY k8sStatus ./k8sStatus
+COPY httpServer ./httpServer
+COPY gRPCServer ./gRPCServer
+COPY statusProto ./statusProto
+RUN go mod download
+
+
+COPY *.go ./
+
+RUN go build -o /k8sjobs
+
+
+
+# ##
+# ## Deploy
+# ##
+FROM gcr.io/distroless/base-debian10
+
+WORKDIR /
+
+COPY --from=build /k8sjobs /k8sjobs
+
+EXPOSE 8080
+EXPOSE 50051
+
+USER nonroot:nonroot
+
+ENTRYPOINT ["/k8sjobs"]
+

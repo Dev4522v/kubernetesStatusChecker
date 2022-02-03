@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "k8sjobshelm.fullname" . }}
+  labels:
+    {{- include "k8sjobshelm.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      nodePort: {{ .Values.service.nodePort }}
+  selector:
+    {{- include "k8sjobshelm.selectorLabels" . | nindent 4 }}
