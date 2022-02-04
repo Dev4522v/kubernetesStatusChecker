@@ -21,7 +21,7 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  name: "k8sjobs"
 
 podAnnotations: {}
 
@@ -42,8 +42,8 @@ service:
   type: NodePort
   name: http
   protocol: TCP
-  port: 8080
-  targetPort: 8080
+  port: 50051
+  targetPort: 50051
   nodePort: 30001
   externalIPs:
     - 80.11.12.10
