@@ -7,14 +7,11 @@ import (
 	"practice/k8sjobs/statusProto"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
 	fmt.Println("Hello client .....")
-
-	opts := grpc.WithTransportCredentials(insecure.NewCredentials())
-	cc, err := grpc.Dial("192.168.64.2:30001", opts)
+	cc, err := grpc.Dial("192.168.64.2:30001", grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
 	}

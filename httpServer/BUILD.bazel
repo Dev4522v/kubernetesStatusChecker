@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "httpServer",
+    srcs = ["httpServer.go"],
+    importpath = "practice/k8sjobs/httpServer",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "httpServer_test",
+    srcs = ["httpServer_test.go"],
+    deps = [":httpServer"],
+)

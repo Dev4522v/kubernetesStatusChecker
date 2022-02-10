@@ -2,32 +2,36 @@ package k8sStatus
 
 import (
 	"context"
+	"flag"
 	"fmt"
+	"os"
+	"path/filepath"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
 )
 
 func ConnectToK8s() (*kubernetes.Clientset, error) {
-	config, err := rest.InClusterConfig()
-	if err != nil {
-		return nil, err
+
+	var config *rest.Config
+	var err error
+	var kubeconfig *string
+	if home := os.Getenv("HOME"); home != "" {
+		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
+		flag.Parse()
+		// use the current context in kubeconfig
+		config, err = clientcmd.BuildConfigFromFlags("", *kubeconfig)
+		if err != nil {
+			panic(err.Error())
+		}
+	} else {
+		config, err = rest.InClusterConfig()
+		if err != nil {
+			return nil, err
+		}
 	}
-
-	// var kubeconfig *string
-	// if home := homedir.HomeDir(); home != "" {
-	// 	kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
-	// } else {
-	// 	kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
-	// }
-	// flag.Parse()
-
-	// // use the current context in kubeconfig
-	// config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
-	// if err != nil {
-	// 	panic(err.Error())
-	// }
 
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {

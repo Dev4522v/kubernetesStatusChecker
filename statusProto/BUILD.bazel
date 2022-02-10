@@ -1,0 +1,20 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
+#gazelle:ignore
+proto_library(
+    name = "statusProto_proto",
+    srcs = ["statusFinder.proto"],
+    visibility = ["//visibility:public"],
+)
+
+#gazelle:ignore
+go_proto_library(
+    name = "statusProto_go_proto",
+    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
+    importpath = "practice/k8sjobs/statusProto",
+    proto = ":statusProto_proto",
+    visibility = ["//visibility:public"],
+)
+

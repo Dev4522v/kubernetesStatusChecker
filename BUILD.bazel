@@ -1,0 +1,23 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+# gazelle:prefix practice/k8sjobs
+gazelle(name = "gazelle")
+
+go_library(
+    name = "k8sjobs_lib",
+    srcs = ["main.go"],
+    importpath = "practice/k8sjobs",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//gRPCServer",
+        "//httpServer",
+        "//k8sStatus",
+    ],
+)
+
+go_binary(
+    name = "k8sjobs",
+    embed = [":k8sjobs_lib"],
+    visibility = ["//visibility:public"],
+)

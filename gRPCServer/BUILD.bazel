@@ -1,0 +1,12 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "gRPCServer",
+    srcs = ["gRPCServer.go"],
+    importpath = "practice/k8sjobs/gRPCServer",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//statusProto:statusProto_go_proto",
+        "@org_golang_google_grpc//:go_default_library",
+    ],
+)
